@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<div class="container mx-auto max-w-sm mt-28 bg-orange-200 p-6 flex items-center justify-end text-right rounded-2xl shadow-lg">
+    <form method="post" class="flex flex-col gap-4 w-full max-w-lg">
+        {% if error %}
+            <div class="w-full rounded-lg h-fit p-2 mx-auto bg-red-300">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+
+        <h1 class="font-bold text-xl">ورود</h1>
+        <div class="flex flex-col gap-2">
+            <label for="inputEmail" class="text-sm">لطفا ایمیل خود را وارد کنید</label>
+            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="ltr:ml-0 w-full p-2 outline-none rounded-lg border border-gray-50 focus:border-orange-700" autocomplete="email" required autofocus>
+            <label for="inputPassword" class="text-sm">رمز عبور خود را وارد کنید</label>
+            <input type="password" name="password" id="inputPassword" class="w-full p-2 outline-none rounded-lg border border-gray-50 focus:border-orange-700" autocomplete="current-password" required>
+
+            <input type="hidden" name="_csrf_token"
+                value="{{ csrf_token('authenticate') }}"
+            >
+        </div>
+        <div class="flex items-center gap-2">
+            <label class="text-sm font-medium text-black">
+                مرا به یاد داشته باش
+            </label>
+            <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 outline-none rounded focus:ring-blue-500" type="checkbox" name="_remember_me">
+        </div>
+
+        <div class="max-w-lg p-2 mt-2 flex justify-center items-center rounded-lg bg-orange-700 text-white cursor-pointer transition hover:opacity-70">
+            <input class="outline-none" id="submitBtn" type="submit" value="ورود">
+        </div>
+</form>
+</div>
+{% endblock %}
