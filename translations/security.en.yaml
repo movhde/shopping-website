@@ -1,2 +1,4 @@
 "Invalid credentials.": "رمز وارد شده اشتباه است!"
 "Username could not be found.": "ایمیلی با این نام پیدا نشد!"
+"There is already an account with this email": "ایمیلی با این نام ثبت شده!"
+"Your password should be at least {{ limit }} characters (pluralization is used)": "رمز عبور شما باید حداقل ۶ حرف باشد (از حروف بزرگ نیز استفاده شود)"
