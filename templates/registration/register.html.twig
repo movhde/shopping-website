@@ -18,7 +18,7 @@
                     }) }}
                     {% if form_errors(registrationForm.email) %}
                         <div class="text-center p-2 rounded-lg bg-red-300">
-                            {{ form_errors(registrationForm.email) }}
+                            {{ form_errors(registrationForm.email) }}{{ "email_entered"|trans }}
                         </div>
                     {% endif %}
                     {{ form_label(registrationForm.plainPassword, 'رمز عبور') }}
@@ -26,7 +26,7 @@
                         'attr': {'class': 'ltr:ml-0 w-full p-2 outline-none rounded-lg border border-gray-50 focus:border-orange-700'}
                     }) }}
                         <div class="text-center p-2 rounded-lg bg-red-300">
-                            {{ form_errors(registrationForm.plainPassword) }}
+                            {{ form_errors(registrationForm.plainPassword) }} {{"password_error"|trans }}
                         </div>
                     <div class="flex gap-2">
                         {{ form_label(registrationForm.agreeTerms, 'با شرایط موافقم') }}

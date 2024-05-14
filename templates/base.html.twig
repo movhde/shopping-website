@@ -12,27 +12,15 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body dir="rtl">
-        <nav class="bg-gray-800">
-            <div class="mx-auto max-w-7xl p-2 sm:px-6 lg:px-8">
-                <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                    <div class="hidden sm:ml-6 sm:block">
-                        <div class="flex space-x-4">
-                            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                            <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">خانه</a>
-                            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">محصولات</a>
-                        </div>
-                    </div>
-                </div>
+    <body dir="rtl" class="bg-gray-100">
+        <nav class="w-full h-fit bg-orange-700 p-4 flex justify-between">
+            <div>
+                <a href="{{ path('app_homepage') }}" class="bg-[#0C2D57] text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">خانه</a>
+                <a href="{{ path('app_homepage') }}" class="text-white hover:bg-[#0C2D57] hover:text-white rounded-md px-3 py-2 text-sm font-medium">محصولات</a>
             </div>
-
-            <!-- Mobile menu, show/hide based on menu state. -->
-            <div class="sm:hidden" id="mobile-menu">
-                <div class="max-w-fit space-y-1 px-2 pb-3 pt-2">
-                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">خانه</a>
-                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">محصولات</a>
-                </div>
+            <div>
+                <a href="{{ path('app_login') }}" class="text-white hover:bg-[#0C2D57] hover:text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">ورود</a>
+                <a href="{{ path('app_register') }}" class="text-white hover:bg-[#0C2D57] hover:text-white rounded-md px-3 py-2 text-sm font-medium">ثبت نام</a>
             </div>
         </nav>
 

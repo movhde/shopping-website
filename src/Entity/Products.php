@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProductsRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductsRepository::class)]
@@ -21,6 +22,12 @@ class Products
 
     #[ORM\Column]
     private ?int $stock = null;
+
+    #[ORM\Column(type: Types::STRING)]
+    private $ImageUrl = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
 
     public function getId(): ?int
     {
@@ -59,6 +66,30 @@ class Products
     public function setStock(int $stock): static
     {
         $this->stock = $stock;
+
+        return $this;
+    }
+
+    public function getImageUrl()
+    {
+        return $this->ImageUrl;
+    }
+
+    public function setImageUrl($image): static
+    {
+        $this->ImageUrl = $image;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

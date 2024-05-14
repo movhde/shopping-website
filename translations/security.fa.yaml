@@ -1,0 +1,6 @@
+"Invalid credentials.": "رمز وارد شده اشتباه است!"
+"Username could not be found.": "ایمیلی با این نام پیدا نشد!"
+"There is already an account with this email": "ایمیلی با این نام ثبت شده!"
+"Your password should be at least 6 characters": "رمز عبور شما باید حداقل ۶ حرف باشد"
+email_entered: "ایمیلی با این نام ثبت شده"
+password_error: "رمز عبو شما باید حداقل ۶ حرف باشد"
