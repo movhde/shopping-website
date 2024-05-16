@@ -6,6 +6,10 @@
     <img class="hover:scale-150 transition duration-400" src="{{ product.imageUrl }}" >
   </div>
   <div></div>
-  <div></div>
+  <div>
+    <a href="{{ path('app_new_order', {
+      'id': product.id
+    }) }}" >ثبت سفارش
+  </div>
 </div>
 {% endblock %}
