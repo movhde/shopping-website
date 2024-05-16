@@ -13,14 +13,14 @@
         {% endblock %}
     </head>
     <body dir="rtl" class="bg-gray-100">
-        <nav class="w-full h-fit bg-orange-700 p-4 flex justify-between">
-            <div>
-                <a href="{{ path('app_homepage') }}" class="bg-[#0C2D57] text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">خانه</a>
-                <a href="{{ path('app_homepage') }}" class="text-white hover:bg-[#0C2D57] hover:text-white rounded-md px-3 py-2 text-sm font-medium">محصولات</a>
+        <nav class="w-full h-fit bg-orange-700 sm:p-4 p-2 sm:flex justify-between">
+            <div class="w-fit sm:flex sm:flex-row flex flex-col gap-1">
+                <a href="{{ path('app_homepage') }}" class="w-fit bg-[#0C2D57] text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium" aria-current="page">خانه</a>
+                <a href="{{ path('app_homepage') }}" class="w-fit text-white transition duration-200 hover:bg-[#0C2D57] hover:text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium">محصولات</a>
             </div>
-            <div>
-                <a href="{{ path('app_login') }}" class="text-white hover:bg-[#0C2D57] hover:text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">ورود</a>
-                <a href="{{ path('app_register') }}" class="text-white hover:bg-[#0C2D57] hover:text-white rounded-md px-3 py-2 text-sm font-medium">ثبت نام</a>
+            <div class="w-fit sm:flex sm:flex-row flex flex-col">
+                <a href="{{ path('app_login') }}" class="w-fit text-white transition duration-200 hover:bg-[#0C2D57] hover:text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium" aria-current="page">ورود</a>
+                <a href="{{ path('app_register') }}" class="w-fit text-white transition duration-200 hover:bg-[#0C2D57] hover:text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium">ثبت نام</a>
             </div>
         </nav>
 

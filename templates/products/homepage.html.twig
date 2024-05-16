@@ -4,9 +4,14 @@
 <div class="container mx-auto p-2 flex flex-col gap-4 mt-12">
   <div class="flex gap-4 justify-center">
     {% for product in products %}
-      <div class="w-64 max-w-sm h-80 shadow-lg rounded-lg p-4 bg-white flex flex-col justify-between items-center border border-white hover:cursor-pointer hover:border hover:border-black">
+    <a href="{{ path('app_products_show', {
+      'id': product.id
+    }) }}">
+      <div class="w-64 max-w-sm h-fit min-h-80 shadow-lg rounded-lg p-4 bg-white flex flex-col justify-between items-center border border-white transition duration-200 hover:cursor-pointer hover:border hover:border-black">
         <div class="flex flex-col justify-between items-center gap-4">
-          <img src="{{ product.imageUrl }}">
+        <div class="w-40 h-40">
+          <img class="w-full" src="{{ product.imageUrl }}">
+        </div>
           <span class="font-bold text-center">{{ product.name }}</span>
         </div>
         <span class="text-lg text-center font-bold float-start">{{ product.price }}.000 تومان</span>
@@ -14,6 +19,7 @@
         {% if loop.index % 4 == 0 %}
             </div><div class="flex gap-4 justify-center">
         {% endif %}
+    </a>
     {% endfor %}
   </div>
 </div>

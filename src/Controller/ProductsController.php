@@ -19,4 +19,12 @@ class ProductsController extends AbstractController
       'products' => $products
     ]);
   }
+
+  #[Route('/products/{id}', name: 'app_products_show')]
+  public function show(Products $products)
+  {
+    return $this->render('products/show.html.twig', [
+      'product' => $products
+    ]);
+  }
 }
