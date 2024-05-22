@@ -9,31 +9,32 @@
 
         <h1 class="font-bold text-xl">ثبت نام</h1>
 
-
         {{ form_start(registrationForm) }}
             <div class="flex flex-col gap-2">
-                    {{ form_label(registrationForm.email, 'ایمیل') }}
-                    {{ form_widget(registrationForm.email, {
-                        'attr': {'class': 'ltr:ml-0 w-full p-2 outline-none rounded-lg border border-gray-50 focus:border-orange-700'}
-                    }) }}
-                    {% if form_errors(registrationForm.email) %}
-                        <div class="text-center p-2 rounded-lg bg-red-300">
-                            {{ form_errors(registrationForm.email) }}{{ "email_entered"|trans }}
-                        </div>
-                    {% endif %}
-                    {{ form_label(registrationForm.plainPassword, 'رمز عبور') }}
-                    {{ form_widget(registrationForm.plainPassword, {
-                        'attr': {'class': 'ltr:ml-0 w-full p-2 outline-none rounded-lg border border-gray-50 focus:border-orange-700'}
-                    }) }}
-                        <div class="text-center p-2 rounded-lg bg-red-300">
-                            {{ form_errors(registrationForm.plainPassword) }} {{"password_error"|trans }}
-                        </div>
-                    <div class="flex gap-2">
-                        {{ form_label(registrationForm.agreeTerms, 'با شرایط موافقم') }}
-                        {{ form_widget(registrationForm.agreeTerms, {
-                            'attr': {'class': 'outline-none'}
-                        }) }}
+                {{ form_label(registrationForm.email, 'ایمیل') }}
+                {{ form_widget(registrationForm.email, {
+                    'attr': {'class': 'ltr:ml-0 w-full p-2 outline-none rounded-lg border border-gray-50 focus:border-orange-700'}
+                }) }}
+                {% if form_errors(registrationForm.email) %}
+                    <div class="text-center p-2 rounded-lg bg-red-300">
+                        {{ form_errors(registrationForm.email) }}
                     </div>
+                {% endif %}
+                {{ form_label(registrationForm.plainPassword, 'رمز عبور') }}
+                {{ form_widget(registrationForm.plainPassword, {
+                    'attr': {'class': 'ltr:ml-0 w-full p-2 outline-none rounded-lg border border-gray-50 focus:border-orange-700'}
+                }) }}
+                {% if form_errors(registrationForm.plainPassword) %}
+                    <div class="text-center p-2 rounded-lg bg-red-300">
+                        {{ form_errors(registrationForm.plainPassword) }}
+                    </div>
+                {% endif %}
+                <div class="flex gap-2">
+                    {{ form_label(registrationForm.agreeTerms, 'با شرایط موافقم') }}
+                    {{ form_widget(registrationForm.agreeTerms, {
+                        'attr': {'class': 'outline-none'}
+                    }) }}
+                </div>
             </div>
 
             <div class="max-w-lg p-2 mt-4 flex justify-center items-center rounded-lg bg-orange-700 text-white cursor-pointer transition hover:opacity-70">

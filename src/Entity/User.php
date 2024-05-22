@@ -36,13 +36,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     /**
+     * @var Collection<int, ShoppingCart>
+     */
+    #[ORM\OneToMany(targetEntity: ShoppingCart::class, mappedBy: 'user')]
+    private Collection $shoppingCarts;
+
+    /**
      * @var Collection<int, Order>
      */
-    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'customer_id')]
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'customer')]
     private Collection $orders;
 
     public function __construct()
     {
+        $this->shoppingCarts = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
 
@@ -122,6 +129,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * @return Collection<int, ShoppingCart>
+     */
+    public function getShoppingCarts(): Collection
+    {
+        return $this->shoppingCarts;
+    }
+
+    public function addShoppingCart(ShoppingCart $shoppingCart): static
+    {
+        if (!$this->shoppingCarts->contains($shoppingCart)) {
+            $this->shoppingCarts->add($shoppingCart);
+            $shoppingCart->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShoppingCart(ShoppingCart $shoppingCart): static
+    {
+        if ($this->shoppingCarts->removeElement($shoppingCart)) {
+            // set the owning side to null (unless already changed)
+            if ($shoppingCart->getUser() === $this) {
+                $shoppingCart->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Collection<int, Order>
      */
     public function getOrders(): Collection
@@ -133,7 +170,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->orders->contains($order)) {
             $this->orders->add($order);
-            $order->setCustomerId($this);
+            $order->setCustomer($this);
         }
 
         return $this;
@@ -143,8 +180,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->orders->removeElement($order)) {
             // set the owning side to null (unless already changed)
-            if ($order->getCustomerId() === $this) {
-                $order->setCustomerId(null);
+            if ($order->getCustomer() === $this) {
+                $order->setCustomer(null);
             }
         }
 

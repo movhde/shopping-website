@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Products;
 use App\Repository\ProductsRepository;
+use App\Repository\ShoppingCartRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,10 +22,17 @@ class ProductsController extends AbstractController
   }
 
   #[Route('/products/{id}', name: 'app_products_show')]
-  public function show(Products $products)
+  public function show($id, Products $products, ShoppingCartRepository $shoppingCartRepository)
   {
+    // $criteria = array_filter(array(
+    //   'user' => $this->getUser(),
+    //   'product' => $id
+    // ));
+    // $cartItem = $shoppingCartRepository->findBy($criteria);
+
     return $this->render('products/show.html.twig', [
-      'product' => $products
+      'product' => $products,
+      // 'cartItem' => $cartItem[0]
     ]);
   }
 }

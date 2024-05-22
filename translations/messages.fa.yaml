@@ -1,0 +1,7 @@
+forms:
+  constraints:
+    plainPassowrd:
+      length: 'رمز عبور باید حداقل ۶ حرف باشد.'
+      notBlank: 'ابتدا رمز عبور خود را وارد کنید.'
+    email:
+      duplicate: 'این ایمیل قبلا استفاده شده است!'

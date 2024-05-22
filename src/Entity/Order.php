@@ -18,12 +18,11 @@ class Order
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $amount = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $customer = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    private ?User $customer = null;
 
     public function __construct()
     {
@@ -47,18 +46,6 @@ class Order
         return $this;
     }
 
-    public function getCustomerId(): ?User
-    {
-        return $this->customer;
-    }
-
-    public function setCustomerId(?User $customer): static
-    {
-        $this->customer = $customer;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -67,6 +54,18 @@ class Order
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?User
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?User $customer): static
+    {
+        $this->customer = $customer;
 
         return $this;
     }
