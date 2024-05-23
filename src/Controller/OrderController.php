@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Repository\AddressRepository;
+use App\Repository\CityRepository;
+use App\Repository\ProvinceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,12 +27,17 @@ class OrderController extends AbstractController
     }
 
     #[Route('/checkout', name: 'app_checkout_order')]
-    public function checkoutOrder(AddressRepository $addressRepository)
+    public function checkoutOrder(AddressRepository $addressRepository, ProvinceRepository $provinceRepository, CityRepository $cityRepository)
     {
         $addresses = $addressRepository->findAll();
+        $provinces = $provinceRepository->findAll();
+        $cities = $cityRepository->findAll();
+
 
         return $this->render('order/checkout.html.twig', [
-            'addresses' => $addresses
+            'addresses' => $addresses,
+            'provinces' => $provinces,
+            'cities' => $cities
         ]);
     }
 
@@ -48,9 +55,15 @@ class OrderController extends AbstractController
     }
 
     #[Route('new/address', name: 'app_new_address')]
-    public function newAddress()
+    public function newAddress(ProvinceRepository $provinceRepository, CityRepository $cityRepository)
     {
-        return $this->render('address/new.html.twig');
+        $provinces = $provinceRepository->findAll();
+        $cities = $cityRepository->findAll();
+
+        return $this->render('address/new.html.twig', [
+            'provinces' => $provinces,
+            'cities' => $cities
+        ]);
     }
 
     #[Route('remove/address/{id}', name: 'app_remove_address')]

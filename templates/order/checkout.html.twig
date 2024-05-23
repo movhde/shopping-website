@@ -17,11 +17,21 @@
       <div class="flex gap-4">
         <div class="w-full flex flex-col gap-2">
           <label for="province">استان*</label>
-          <input required class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" id="province" name="province" type="text" >
+          {# <input required class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" id="province" name="province" type="text" > #}
+          <select class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" name="province" id="province">
+          {% for province in provinces %}
+            <option>{{ province.name }}</option>
+          {% endfor %}
+          </select>
         </div>
         <div class="w-full flex flex-col gap-2">
           <label for="city">شهر*</label>
-          <input required class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" id="city" type="text" >
+          {# <input required class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" id="city" type="text" > #}
+          <select class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" name="city" id="city">
+          {% for city in cities %}
+            <option>{{ city.name }}</option>
+          {% endfor %}
+          </select>
         </div>
       </div>
       <div class="flex flex-col gap-2">
