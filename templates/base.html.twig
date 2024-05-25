@@ -17,10 +17,15 @@
             <div class="w-fit sm:flex sm:flex-row flex flex-col gap-1">
                 <a href="{{ path('app_homepage') }}" class="w-fit bg-[#c54b4b] text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium" aria-current="page">خانه</a>
                 <a href="{{ path('app_homepage') }}" class="w-fit text-white transition duration-200 hover:bg-[#c54b4b] hover:text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium">محصولات</a>
+                <a href="{{ path('app_show_cart') }}" class="w-fit text-white transition duration-200 hover:bg-[#c54b4b] hover:text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium">سبد خرید</a>
             </div>
             <div class="w-fit sm:flex sm:flex-row flex flex-col">
-                <a href="{{ path('app_login') }}" class="w-fit text-white transition duration-200 hover:bg-[#c54b4b] hover:text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium" aria-current="page">ورود</a>
-                <a href="{{ path('app_register') }}" class="w-fit text-white transition duration-200 hover:bg-[#c54b4b] hover:text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium">ثبت نام</a>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <a href="{{ path('app_logout') }}" class="w-fit text-white transition duration-200 hover:bg-[#c54b4b] hover:text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium">خروج از حساب کاربری</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="w-fit text-white transition duration-200 hover:bg-[#c54b4b] hover:text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium" aria-current="page">ورود</a>
+                    <a href="{{ path('app_register') }}" class="w-fit text-white transition duration-200 hover:bg-[#c54b4b] hover:text-white rounded-md px-3 py-2 sm:text-sm text-xs font-medium">ثبت نام</a>
+                {% endif %}
             </div>
         </nav>
 

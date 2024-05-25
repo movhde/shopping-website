@@ -3,33 +3,72 @@
 namespace App\Controller;
 
 use App\Entity\Address;
+use App\Entity\Order;
+use App\Entity\OrderItem;
 use App\Repository\AddressRepository;
 use App\Repository\CityRepository;
+use App\Repository\OrderItemRepository;
+use App\Repository\OrderRepository;
+use App\Repository\ProductsRepository;
 use App\Repository\ProvinceRepository;
+use App\Repository\ShoppingCartRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface;
 
 class OrderController extends AbstractController
 {
-    #[Route('/order/{id}', name: 'app_new_order')]
-    public function new(): Response
+    #[Route('/order', name: 'app_new_order')]
+    public function new(Request $request, AddressRepository $addressRepository, EntityManagerInterface $entityManager, OrderRepository $orderRepository, ShoppingCartRepository $shoppingCartRepository): Response
     {
-        return new Response('order blublu');
+        $address = $addressRepository->find($request->request->get('address'));
+        $order = new Order();
+        $order->setCustomer($this->getUser());
+        $order->setAddress($address);
+        $entityManager->persist($order);
+
+        $shop = $shoppingCartRepository->findBy(['user' => $this->getUser()]);
+
+        foreach ($shop as $shopItem) {
+            $orderItem = new OrderItem();
+            $orderItem->setProduct($shopItem->getProduct());
+            $orderItem->setAmount($shopItem->getAmount());
+            $orderItem->setUserOrder($order);
+            $entityManager->persist($orderItem);
+            // remove shopItem
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_show_order', [
+            'id' => $order->getId()
+        ]);
     }
 
-    #[Route('/orders', name: 'app_show_order')]
-    public function show(EntityManagerInterface $entityManager)
+    #[Route('/orders/{id}', name: 'app_show_order')]
+    public function show($id, OrderItemRepository $orderItemRepository, ProductsRepository $productsRepository, EntityManagerInterface $entityManager)
     {
-        return new Response('orders...');
+        $orders = $orderItemRepository->findBy(['userOrder' => $id]);
+
+        return $this->render('order/show.html.twig', [
+            'orders' => $orders
+        ]);
     }
 
     #[Route('/checkout', name: 'app_checkout_order')]
-    public function checkoutOrder(AddressRepository $addressRepository, ProvinceRepository $provinceRepository, CityRepository $cityRepository)
+    public function checkoutOrder(ShoppingCartRepository $shoppingCartRepository, AddressRepository $addressRepository, ProvinceRepository $provinceRepository, CityRepository $cityRepository)
     {
-        $addresses = $addressRepository->findAll();
+        $cartItems = $shoppingCartRepository->findBy(['user' => $this->getUser()]);
+
+        $totalPrice = 0;
+        foreach ($cartItems as $items) {
+            $totalPrice += $items->getAmount() * $items->getProduct()->getPrice();
+        }
+
+        $addresses = $addressRepository->findBy(['user' => $this->getUser()]);
         $provinces = $provinceRepository->findAll();
         $cities = $cityRepository->findAll();
 
@@ -37,40 +76,8 @@ class OrderController extends AbstractController
         return $this->render('order/checkout.html.twig', [
             'addresses' => $addresses,
             'provinces' => $provinces,
-            'cities' => $cities
+            'cities' => $cities,
+            'totalPrice' => $totalPrice
         ]);
-    }
-
-    #[Route('/submit/address', name: 'app_submit_address', methods: ['POST'])]
-    public function submitAddress(EntityManagerInterface $entityManager, Request $request)
-    {
-        $address = new Address();
-        $address->setProvince($request->request->get('province'));
-        $address->setAddress($request->request->get('address'));
-        $address->setPostcode($request->request->get('postcode'));
-        $entityManager->persist($address);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_checkout_order');
-    }
-
-    #[Route('new/address', name: 'app_new_address')]
-    public function newAddress(ProvinceRepository $provinceRepository, CityRepository $cityRepository)
-    {
-        $provinces = $provinceRepository->findAll();
-        $cities = $cityRepository->findAll();
-
-        return $this->render('address/new.html.twig', [
-            'provinces' => $provinces,
-            'cities' => $cities
-        ]);
-    }
-
-    #[Route('remove/address/{id}', name: 'app_remove_address')]
-    public function removeAddress(AddressRepository $addressRepository, $id)
-    {
-        $addressRepository->removeAddress($id);
-
-        return $this->redirectToRoute('app_checkout_order');
     }
 }

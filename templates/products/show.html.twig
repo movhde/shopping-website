@@ -18,7 +18,7 @@
   </div>
   <div class="h-fit border border-gray-200 flex flex-col items-center gap-6 p-6 rounded-lg">
     <div class="flex gap-2 items-center">
-      <span class="font-bold text-3xl">{{ product.price }}.000</span><span class="text-xl">تومان</span>
+      <span class="font-bold text-3xl">{{ product.price|number_format() }}</span><span class="text-xl">تومان</span>
     </div>
     <div class="flex gap-8 border border-gray-300 p-2 text-2xl rounded-lg">
       <a 

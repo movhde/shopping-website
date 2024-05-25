@@ -5,7 +5,7 @@
 {% block body %}
 
 <div class="container mx-auto mt-10 lg:flex lg:flex-row flex flex-col gap-4 justify-evenly">
-    <div class="flex flex-col gap-4">
+    <div class="w-full max-w-3xl flex flex-col gap-4">
     {% for cartItem in cartItems %}
         <div class="sm:flex sm:flex-row flex flex-col p-6 justify-between gap-4 bg-white rounded-lg border border-gray-200">
             <div class="flex items-center gap-4">
@@ -37,25 +37,25 @@
                     </div>
                 </a>
                 <div class="flex justify-center gap-1 sm:text-base text-sm font-bold w-36">
-                    <span>{{ cartItem.product.price }}.000</span><span>تومان</span>
+                    <span>{{ cartItem.product.price|number_format() }}</span><span>تومان</span>
                 </div>
             </div>
         </div>
     {% endfor %}
     </div>
-    <div class="w-96 flex flex-col gap-2 items-center h-fit p-8 bg-white border border-gray-200 rounded-lg">
+    <div class="flex flex-col gap-2 items-center h-fit p-8 bg-white border border-gray-200 rounded-lg">
         <span class="text-xl font-bold mb-4">خلاصه صورتحساب</span>
-        <div class="w-full flex justify-between">
+        <div class="w-full lg:gap-20 gap-10 flex justify-between">
             <span class="text-gray-500 text-sm">مبلغ کل</span>
-            <span class="text-gray-500 text-sm">{{ totalPrice }} تومان</span>
+            <span class="text-gray-500 text-sm">{{ totalPrice|number_format() }} تومان</span>
         </div>
-        <div class="w-full flex justify-between">
+        <div class="w-full lg:gap-20 gap-10 flex justify-between">
             <span class="text-gray-500 text-sm">هزینه ارسال</span>
             <span class="text-gray-500 text-sm">وابسته به آدرس</span>
         </div>
-        <div class="w-full flex justify-between">
+        <div class="w-full lg:gap-20 gap-10 flex justify-between">
             <span class="text-gray-500 text-sm">مبلغ قابل پرداخت</span>
-            <span class="text-gray-500 text-sm">{{ totalPrice }} تومان</span>
+            <span class="text-gray-500 text-sm">{{ totalPrice|number_format() }} تومان</span>
         </div>
         <a href="{{ path('app_checkout_order') }}">
             <input class="cursor-pointer py-2 px-6 bg-black mt-4 rounded-lg text-lg text-white outline-none" type="button" value="تکمیل خرید" >

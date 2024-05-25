@@ -14,10 +14,9 @@
       </div>
     </div>
     <form action="{{ path("app_submit_address") }}" method="post" class="flex flex-col gap-4">
-      <div class="flex gap-4">
+      <div class="sm:flex sm:flex-row flex flex-col gap-4">
         <div class="w-full flex flex-col gap-2">
           <label for="province">استان*</label>
-          {# <input required class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" id="province" name="province" type="text" > #}
           <select class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" name="province" id="province">
           {% for province in provinces %}
             <option>{{ province.name }}</option>
@@ -26,7 +25,6 @@
         </div>
         <div class="w-full flex flex-col gap-2">
           <label for="city">شهر*</label>
-          {# <input required class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" id="city" type="text" > #}
           <select class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" name="city" id="city">
           {% for city in cities %}
             <option>{{ city.name }}</option>
@@ -51,55 +49,64 @@
     </div>
   </div>
 
-  <div class="flex justify-evenly container mx-auto gap-4 mt-10">
-    <div class="flex flex-col gap-4">
-      {% if not addresses %}
-        {{ include('address/new.html.twig') }}
-      {% endif %}
+  <form action="{{ path('app_new_order') }}" method="post">
+    <div class="lg:flex lg:flex-row flex flex-col justify-evenly container mx-auto gap-4 mt-10">
+      <div class="w-full lg:max-w-2xl max-w-3xl flex flex-col gap-4">
+        {% if not addresses %}
+          {{ include('address/new.html.twig') }}
+        {% endif %}
 
-      {% for address in addresses %}
-      <div class="flex flex-col bg-white border border-gray-300 rounded-lg p-4 gap-2">
-        <span class="text-xs text-gray-500">آدرس دریافت سفارش</span>
-        <span class="text-sm">{{ address.province }}</span>
-        <span class="text-sm">{{ address.address }}</span>
-        <div class="flex justify-end mt-4">
-          <a href="{{ path('app_remove_address', {
-            'id': address.id
-          }) }}" class="text-red-500">حذف</a>
+        {% for address in addresses %}
+        <label class="flex flex-col bg-white cursor-pointer border border-gray-300 rounded-lg p-4">
+          <div class="flex items-start gap-2">
+          <div class="relative flex h-fit cursor-pointer items-center justify-center text-sm lg:text-base">
+            <input class="peer/checkbox h-4 w-4 cursor-pointer appearance-none rounded-full border border-[#c54b4b] transition-all" type="radio" value="{{ address.id }}" checked name="address">
+            <div class="absolute hidden h-2 w-2 rounded-full bg-[#d76363] peer-checked/checkbox:flex">
+            </div>
+          </div>
+            <div class="flex flex-col gap-2">
+              <span class="text-xs text-gray-500">آدرس دریافت سفارش</span>
+              <span class="text-sm">{{ address.province }}</span>
+              <span class="text-sm">{{ address.address }}</span>
+            </div>
+          </div>
+          <div class="flex justify-end mt-4">
+            <a href="{{ path('app_remove_address', {
+              'id': address.id
+            }) }}" class="text-red-500">حذف</a>
+          </div>
+        </label>
+        {% endfor %}
+        <a href="#" id="newAddress">
+          <div class="flex justify-center items-center bg-white border border-gray-300 rounded-lg py-8">
+            افزودن آدرس جدید +
+          </div>
+        </a>
+        <div class="flex flex-col bg-white border border-gray-300 rounded-lg p-4">
+          <span class="text-xs text-gray-500">شیوه زمان ارسال</span>
+          <a href="#">
+              <input class="float-left cursor-pointer py-2 px-6 bg-black mt-4 rounded-lg text-sm text-white outline-none" type="button" value="انتخاب زمان ارسال" >
+          </a>
         </div>
       </div>
-      {% endfor %}
-      <a href="#" id="newAddress">
-        <div class="flex justify-center items-center bg-white border border-gray-300 rounded-lg py-8">
-          افزودن آدرس جدید +
-        </div>
-      </a>
-      <div class="flex flex-col bg-white border border-gray-300 rounded-lg p-4">
-        <span class="text-xs text-gray-500">شیوه زمان ارسال</span>
-        <a href="#">
-            <input class="float-left cursor-pointer py-2 px-6 bg-black mt-4 rounded-lg text-sm text-white outline-none" type="button" value="انتخاب زمان ارسال" >
-        </a>
+      <div class="flex flex-col gap-2 items-center h-fit p-8 bg-white border border-gray-200 rounded-lg">
+          <span class="text-xl font-bold mb-4">خلاصه صورتحساب</span>
+          <div class="w-full flex justify-between">
+              <span class="text-gray-500 text-sm">مبلغ کل</span>
+              <span class="text-gray-500 text-sm">{{ totalPrice|number_format() }} تومان</span>
+          </div>
+          <div class="w-full flex justify-between">
+              <span class="text-gray-500 text-sm">هزینه ارسال</span>
+              <span class="text-gray-500 text-sm">وابسته به آدرس</span>
+          </div>
+          <div class="lg:gap-20 gap-10 w-full flex justify-between">
+              <span class="text-gray-500 text-sm">مبلغ قابل پرداخت</span>
+              <span class="text-gray-500 text-sm">{{ totalPrice|number_format() }} تومان</span>
+          </div>
+            <input type="submit" class="cursor-pointer py-2 px-6 border border-black mt-4 rounded-lg text-lg text-black  outline-none" type="button" value="تکمیل خرید" >
       </div>
     </div>
-    <div class="w-96 flex flex-col gap-2 items-center h-fit p-8 bg-white border border-gray-200 rounded-lg">
-        <span class="text-xl font-bold mb-4">خلاصه صورتحساب</span>
-        <div class="w-full flex justify-between">
-            <span class="text-gray-500 text-sm">مبلغ کل</span>
-            <span class="text-gray-500 text-sm"> تومان</span>
-        </div>
-        <div class="w-full flex justify-between">
-            <span class="text-gray-500 text-sm">هزینه ارسال</span>
-            <span class="text-gray-500 text-sm">وابسته به آدرس</span>
-        </div>
-        <div class="w-full flex justify-between">
-            <span class="text-gray-500 text-sm">مبلغ قابل پرداخت</span>
-            <span class="text-gray-500 text-sm">  تومان</span>
-        </div>
-        <a href="{{ path('app_checkout_order') }}">
-            <input class="cursor-pointer py-2 px-6 border border-black mt-4 rounded-lg text-lg text-black  outline-none" type="button" value="تکمیل خرید" >
-        </a>
-    </div>
-  </div>
+  </form>
 
   {% block javascripts %}
   <script>
