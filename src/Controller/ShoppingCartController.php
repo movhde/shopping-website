@@ -7,6 +7,7 @@ use App\Repository\ProductsRepository;
 use App\Repository\ShoppingCartRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class ShoppingCartController extends AbstractController
 {
     #[Route('/cart/{id}', name: 'app_new_cart')]
-    public function new(EntityManagerInterface $entityManager, ShoppingCartRepository $shoppingCartRepository, ProductsRepository $productsRepository, $id): Response
+    public function new(EntityManagerInterface $entityManager, ShoppingCartRepository $shoppingCartRepository, ProductsRepository $productsRepository, Request $request, $id): Response
     {
         $product = $productsRepository->find($id);
         $user = $this->getUser();
@@ -23,18 +24,16 @@ class ShoppingCartController extends AbstractController
             throw new NotFoundHttpException('ابتدا وارد حساب کاربری خود شوید');
         }
 
-        $shoppingCart = new ShoppingCart();
-        $shoppingCart->setUser($user);
+        $shoppingCart = $shoppingCartRepository->findOneBy(['user' => $user, 'product' => $product]);
 
-        $criteria = array_filter(array(
-            'user' => $this->getUser(),
-            'product' => $id
-        ));
-        $cartItem = $shoppingCartRepository->findBy($criteria);
-        if ($cartItem) {
-            return $this->redirectToRoute('app_increaseAmount', ['id' => $cartItem[0]->getId()]);
+        if ($shoppingCart) {
+            $totalAmount = $shoppingCart->getAmount() + $request->get('amount');
+            $shoppingCart->setAmount($totalAmount);
         } else {
+            $shoppingCart = new ShoppingCart();
+            $shoppingCart->setUser($user);
             $shoppingCart->setProduct($product);
+            $shoppingCart->setAmount($request->get('amount'));
         }
 
         $entityManager->persist($shoppingCart);
@@ -46,8 +45,6 @@ class ShoppingCartController extends AbstractController
     #[Route('/cart', name: 'app_show_cart')]
     public function show(ShoppingCartRepository $shoppingCartRepository)
     {
-        // $cartItems = $entityManager->getRepository(Products::class)->createQueryBuilder('p')->join('p.shoppingCarts', 'shp')->andWhere('shp.user = :user')->setParameter('user', $this->getUser())
-        //     ->getQuery()->getResult();
         $cartItems = $shoppingCartRepository->findBy(['user' => $this->getUser()]);
 
         $totalPrice = 0;
@@ -90,7 +87,10 @@ class ShoppingCartController extends AbstractController
     #[Route('/delete/{id}', name: 'app_delete_cartItem')]
     public function deleteItem($id, ShoppingCartRepository $shoppingCartRepository, EntityManagerInterface $entityManager)
     {
-        $shoppingCartRepository->removeProduct($id, $this->getUser());
+        $shop = $shoppingCartRepository->find($id);
+        $entityManager->remove($shop);
+        $entityManager->flush();
+
         return $this->redirectToRoute('app_show_cart');
     }
 }

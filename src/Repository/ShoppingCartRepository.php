@@ -17,14 +17,6 @@ class ShoppingCartRepository extends ServiceEntityRepository
         parent::__construct($registry, ShoppingCart::class);
     }
 
-    public function removeProduct(int $id, User $user)
-    {
-        $this->getEntityManager()->createQuery('DELETE FROM App\Entity\ShoppingCart shp WHERE shp.product = :productId AND shp.user = :user')
-            ->setParameter('productId', $id)
-            ->setParameter('user', $user)
-            ->execute();
-    }
-
     //    /**
     //     * @return ShoppingCart[] Returns an array of ShoppingCart objects
     //     */

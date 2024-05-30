@@ -10,24 +10,24 @@
     {% set ordersLength = 0 %}
 
     {% for order in orders %}
-    <div class="grid grid-cols-6 items-center	bg-white cursor-pointer border border-gray-300 rounded-lg p-4">
-      <div class="w-28 h-28">
-        <img class="w-full" src="{{ order.product.imageUrl }}" >
+    <div class="grid sm:grid-cols-6 grid-cols-1 items-center gap-2	bg-white cursor-pointer border border-gray-300 rounded-lg p-4">
+      <div class="flex justify-center">
+        <img class="w-28 h-28" src="{{ order.product.imageUrl }}" >
       </div>
-      <div class="col-span-2">
-        <span class="text-base font-bold">{{ order.product.name }}</span>
+      <div class="sm:col-span-2 col-span-1 flex justify-center">
+        <span class="text-base font-bold text-center">{{ order.product.name }}</span>
       </div>
-      <div class="flex flex-col items-center">
+      <div class="flex sm:flex-col justify-between flex-row items-center ">
         <span class="text-sm font-bold">قیمت واحد</span>
-        <span class="text-sm">{{ order.product.price|number_format() }}</span>
+        <span class="text-sm">{{ numberConvertor(order.product.price) }}</span>
       </div>
-      <div class="flex flex-col items-center">
+      <div class="flex sm:flex-col justify-between flex-row items-center">
         <span class="text-sm font-bold">تعداد</span>
-        <span class="text-sm">{{ order.amount }}</span>
+        <span class="text-sm">{{ numberConvertor(order.amount) }}</span>
       </div>
-      <div class="flex flex-col items-center">
+      <div class="flex sm:flex-col justify-between flex-row items-center">
         <span class="text-sm font-bold">قیمت کل</span>
-        <span class="text-sm">{{ (order.amount * order.product.price)|number_format() }}</span>
+        <span class="text-sm">{{ numberConvertor(order.amount * order.product.price) }}</span>
       </div>
     </div>
     {% set totalPrice = totalPrice + (order.amount * order.product.price) %}
@@ -38,11 +38,11 @@
         <span class="text-xl font-bold mb-4">صورتحساب نهایی</span>
         <div class="lg:gap-20 gap-10 w-full flex justify-between">
             <span class="text-gray-500 text-sm">تعداد سفارشات</span>
-            <span class="text-gray-500 text-sm">{{ ordersLength }}</span>
+            <span class="text-gray-500 text-sm">{{ numberConvertor(ordersLength) }}</span>
         </div>
         <div class="lg:gap-20 gap-10 w-full flex justify-between">
             <span class="text-gray-500 text-sm">مجموع کل پرداختی شما</span>
-            <span class="text-gray-500 text-sm">{{ totalPrice|number_format() }} تومان</span>
+            <span class="text-gray-500 text-sm">{{ numberConvertor(totalPrice) }} تومان</span>
         </div>
           <input type="submit" class="cursor-pointer py-2 px-6 border border-black mt-4 rounded-lg text-lg text-black  outline-none" type="button" value="پرداخت و تکمیل خرید" >
     </div>

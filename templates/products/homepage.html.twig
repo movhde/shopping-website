@@ -14,7 +14,7 @@
         </div>
           <span class="font-bold text-center">{{ product.name }}</span>
         </div>
-        <span class="text-lg text-center font-bold float-start">{{ product.price|number_format() }} تومان</span>
+        <span class="text-lg text-center font-bold float-start">{{ numberConvertor(product.price) }} تومان</span>
       </div>
     </a>
     {% endfor %}

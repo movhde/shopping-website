@@ -22,17 +22,10 @@ class ProductsController extends AbstractController
   }
 
   #[Route('/products/{id}', name: 'app_products_show')]
-  public function show($id, Products $products, ShoppingCartRepository $shoppingCartRepository)
+  public function show($id, Products $products, ShoppingCartRepository $shoppingCartRepository, ProductsRepository $productsRepository)
   {
-    // $criteria = array_filter(array(
-    //   'user' => $this->getUser(),
-    //   'product' => $id
-    // ));
-    // $cartItem = $shoppingCartRepository->findBy($criteria);
-
     return $this->render('products/show.html.twig', [
-      'product' => $products,
-      // 'cartItem' => $cartItem[0]
+      'product' => $products
     ]);
   }
 }

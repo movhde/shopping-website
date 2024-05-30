@@ -34,6 +34,9 @@ class Address
     #[ORM\ManyToOne(inversedBy: 'addresses')]
     private ?User $user = null;
 
+    #[ORM\Column(options: ["default" => false])]
+    private ?bool $isArchive = null;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -118,6 +121,18 @@ class Address
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function isArchive(): ?bool
+    {
+        return $this->isArchive;
+    }
+
+    public function setArchive(bool $isArchive): static
+    {
+        $this->isArchive = $isArchive;
 
         return $this;
     }

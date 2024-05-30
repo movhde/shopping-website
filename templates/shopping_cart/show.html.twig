@@ -4,8 +4,15 @@
 
 {% block body %}
 
+
+
 <div class="container mx-auto mt-10 lg:flex lg:flex-row flex flex-col gap-4 justify-evenly">
     <div class="w-full max-w-3xl flex flex-col gap-4">
+    {% if not cartItems %}
+    <div class="text-center p-6 bg-white rounded-lg border border-gray-200">
+        <span>سبد خرید شما خالی میباشد.</span>
+    </div>
+    {% endif %}
     {% for cartItem in cartItems %}
         <div class="sm:flex sm:flex-row flex flex-col p-6 justify-between gap-4 bg-white rounded-lg border border-gray-200">
             <div class="flex items-center gap-4">
@@ -22,13 +29,13 @@
                     <a href="{{ path('app_increaseAmount', {
                         'id': cartItem.id
                     }) }}" class="outline-none cursor-pointer hover:text-red-600" type="button">+</a>
-                    <span class="outline-none" type="text">{{ cartItem.amount }}</span>
+                    <span class="outline-none" type="text">{{ numberConvertor(cartItem.amount) }}</span>
                     <a href="{{ path('app_decreaseAmount', {
                         'id': cartItem.id
                     }) }}" class="outline-none cursor-pointer hover:text-red-600" type="button">-</a>
                 </div>
                 <a href="{{ path('app_delete_cartItem', {
-                    'id': cartItem.product.id
+                    'id': cartItem.id
                 }) }}">
                     <div class="cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256">
@@ -37,7 +44,7 @@
                     </div>
                 </a>
                 <div class="flex justify-center gap-1 sm:text-base text-sm font-bold w-36">
-                    <span>{{ cartItem.product.price|number_format() }}</span><span>تومان</span>
+                    <span>{{ numberConvertor(cartItem.product.price) }}</span><span>تومان</span>
                 </div>
             </div>
         </div>
@@ -47,7 +54,7 @@
         <span class="text-xl font-bold mb-4">خلاصه صورتحساب</span>
         <div class="w-full lg:gap-20 gap-10 flex justify-between">
             <span class="text-gray-500 text-sm">مبلغ کل</span>
-            <span class="text-gray-500 text-sm">{{ totalPrice|number_format() }} تومان</span>
+            <span class="text-gray-500 text-sm">{{ numberConvertor(totalPrice) }} تومان</span>
         </div>
         <div class="w-full lg:gap-20 gap-10 flex justify-between">
             <span class="text-gray-500 text-sm">هزینه ارسال</span>
@@ -55,7 +62,7 @@
         </div>
         <div class="w-full lg:gap-20 gap-10 flex justify-between">
             <span class="text-gray-500 text-sm">مبلغ قابل پرداخت</span>
-            <span class="text-gray-500 text-sm">{{ totalPrice|number_format() }} تومان</span>
+            <span class="text-gray-500 text-sm">{{ numberConvertor(totalPrice) }} تومان</span>
         </div>
         <a href="{{ path('app_checkout_order') }}">
             <input class="cursor-pointer py-2 px-6 bg-black mt-4 rounded-lg text-lg text-white outline-none" type="button" value="تکمیل خرید" >

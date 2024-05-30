@@ -16,19 +16,18 @@
     <form action="{{ path("app_submit_address") }}" method="post" class="flex flex-col gap-4">
       <div class="sm:flex sm:flex-row flex flex-col gap-4">
         <div class="w-full flex flex-col gap-2">
-          <label for="province">استان*</label>
-          <select class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" name="province" id="province">
+          <label for="state">استان*</label>
+          <select class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" name="state" id="state">
+            <option>استان را انتخاب کنید</option>
           {% for province in provinces %}
-            <option>{{ province.name }}</option>
+            <option value="{{ province.id }}">{{ province.name }}</option>
           {% endfor %}
           </select>
         </div>
         <div class="w-full flex flex-col gap-2">
           <label for="city">شهر*</label>
           <select class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" name="city" id="city">
-          {% for city in cities %}
-            <option>{{ city.name }}</option>
-          {% endfor %}
+            <option>استان را انتخاب کنید</option>
           </select>
         </div>
       </div>
@@ -52,9 +51,9 @@
   <form action="{{ path('app_new_order') }}" method="post">
     <div class="lg:flex lg:flex-row flex flex-col justify-evenly container mx-auto gap-4 mt-10">
       <div class="w-full lg:max-w-2xl max-w-3xl flex flex-col gap-4">
-        {% if not addresses %}
+        {# {% if not addresses %}
           {{ include('address/new.html.twig') }}
-        {% endif %}
+        {% endif %} #}
 
         {% for address in addresses %}
         <label class="flex flex-col bg-white cursor-pointer border border-gray-300 rounded-lg p-4">
@@ -93,7 +92,7 @@
           <span class="text-xl font-bold mb-4">خلاصه صورتحساب</span>
           <div class="w-full flex justify-between">
               <span class="text-gray-500 text-sm">مبلغ کل</span>
-              <span class="text-gray-500 text-sm">{{ totalPrice|number_format() }} تومان</span>
+              <span class="text-gray-500 text-sm">{{ numberConvertor(totalPrice) }} تومان</span>
           </div>
           <div class="w-full flex justify-between">
               <span class="text-gray-500 text-sm">هزینه ارسال</span>
@@ -101,7 +100,7 @@
           </div>
           <div class="lg:gap-20 gap-10 w-full flex justify-between">
               <span class="text-gray-500 text-sm">مبلغ قابل پرداخت</span>
-              <span class="text-gray-500 text-sm">{{ totalPrice|number_format() }} تومان</span>
+              <span class="text-gray-500 text-sm">{{ numberConvertor(totalPrice) }} تومان</span>
           </div>
             <input type="submit" class="cursor-pointer py-2 px-6 border border-black mt-4 rounded-lg text-lg text-black  outline-none" type="button" value="تکمیل خرید" >
       </div>
@@ -127,6 +126,22 @@
         addressModal.classList.add('hidden');
       }
   }
+  </script>
+  <script>
+  $('#state').change(function () {
+    var id = $(this).find('option:selected').val();
+    $.ajax({
+        method:'post',
+        url: "{{ path('app_ajax') }}",
+        data:{id:id},
+        success:function(msg) {
+          $('#city').empty();
+          for (i = 0; i < msg.length; i++) {
+            $('#city').append(new Option(msg[i].name, msg[i].value));
+          }
+        }
+    })
+  });
   </script>
   {% endblock %}
 

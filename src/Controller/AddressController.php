@@ -15,12 +15,14 @@ use Symfony\Component\Routing\Attribute\Route;
 class AddressController extends AbstractController
 {
   #[Route('/submit/address', name: 'app_submit_address', methods: ['POST'])]
-  public function submitAddress(EntityManagerInterface $entityManager, Request $request)
+  public function submitAddress(EntityManagerInterface $entityManager, Request $request, ProvinceRepository $provinceRepository)
   {
+    $province = $provinceRepository->find($request->request->get('state'));
     $address = new Address();
-    $address->setProvince($request->request->get('province'));
+    $address->setProvince($province->getName());
     $address->setAddress($request->request->get('address'));
     $address->setPostcode($request->request->get('postcode'));
+    $address->setArchive(false);
     $address->setUser($this->getUser());
 
     $entityManager->persist($address);
@@ -42,9 +44,12 @@ class AddressController extends AbstractController
   }
 
   #[Route('remove/address/{id}', name: 'app_remove_address')]
-  public function removeAddress(AddressRepository $addressRepository, $id)
+  public function removeAddress(EntityManagerInterface $entityManager, AddressRepository $addressRepository, $id)
   {
-    $addressRepository->removeAddress($id, $this->getUser());
+    $address = $addressRepository->find($id);
+    $address->setArchive(true);
+
+    $entityManager->flush();
 
     return $this->redirectToRoute('app_checkout_order');
   }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Address;
+use App\Entity\City;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Repository\AddressRepository;
@@ -14,10 +15,12 @@ use App\Repository\ProvinceRepository;
 use App\Repository\ShoppingCartRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class OrderController extends AbstractController
 {
@@ -25,6 +28,7 @@ class OrderController extends AbstractController
     public function new(Request $request, AddressRepository $addressRepository, EntityManagerInterface $entityManager, OrderRepository $orderRepository, ShoppingCartRepository $shoppingCartRepository): Response
     {
         $address = $addressRepository->find($request->request->get('address'));
+
         $order = new Order();
         $order->setCustomer($this->getUser());
         $order->setAddress($address);
@@ -38,7 +42,7 @@ class OrderController extends AbstractController
             $orderItem->setAmount($shopItem->getAmount());
             $orderItem->setUserOrder($order);
             $entityManager->persist($orderItem);
-            // remove shopItem
+            $entityManager->remove($shopItem);
         }
 
         $entityManager->flush();
@@ -59,7 +63,7 @@ class OrderController extends AbstractController
     }
 
     #[Route('/checkout', name: 'app_checkout_order')]
-    public function checkoutOrder(ShoppingCartRepository $shoppingCartRepository, AddressRepository $addressRepository, ProvinceRepository $provinceRepository, CityRepository $cityRepository)
+    public function checkoutOrder(ShoppingCartRepository $shoppingCartRepository, Request $request, AddressRepository $addressRepository, ProvinceRepository $provinceRepository, CityRepository $cityRepository)
     {
         $cartItems = $shoppingCartRepository->findBy(['user' => $this->getUser()]);
 
@@ -68,10 +72,9 @@ class OrderController extends AbstractController
             $totalPrice += $items->getAmount() * $items->getProduct()->getPrice();
         }
 
-        $addresses = $addressRepository->findBy(['user' => $this->getUser()]);
+        $addresses = $addressRepository->findBy(['user' => $this->getUser(), 'isArchive' => false]);
         $provinces = $provinceRepository->findAll();
         $cities = $cityRepository->findAll();
-
 
         return $this->render('order/checkout.html.twig', [
             'addresses' => $addresses,
@@ -79,5 +82,18 @@ class OrderController extends AbstractController
             'cities' => $cities,
             'totalPrice' => $totalPrice
         ]);
+    }
+
+    #[Route('/ajax', name: 'app_ajax')]
+    public function ajax(Request $request, ProvinceRepository $provinceRepository, SerializerInterface $serializer, CityRepository $cityRepository)
+    {
+        $province = $provinceRepository->find($request->request->get('id'));
+        $cities = $cityRepository->findBy(['province' => $province]);
+        $result = array();
+        foreach ($cities as $city) {
+            array_push($result, ['id' => $city->getId(), 'name' => $city->getName()]);
+        }
+
+        return new JsonResponse($result);
     }
 }

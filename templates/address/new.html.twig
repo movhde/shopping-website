@@ -1,5 +1,5 @@
 
-<div class="hidden items-center fixed left-0 top-0 z-1 px-8 w-full h-full bg-opacity-60 bg-black">
+<div class="items-center fixed left-0 top-0 z-1 px-8 w-full h-full bg-opacity-60 bg-black">
   <div class="mt-32 flex flex-col gap-4 container mx-auto max-w-2xl h-auto p-5 shadow-xl bg-white rounded-lg">
   <div class="flex justify-between">
     <span class="font-bold mb-2">افزودن آدرس پستی</span>
@@ -14,7 +14,7 @@
       <div class="w-full flex flex-col gap-2">
         <label for="province">استان*</label>
         {# <input required class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" id="province" name="province" type="text" > #}
-          <select class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" name="province" id="province">
+          <select class="border border-gray-300 rounded-lg p-2 focus-within:outline-none" name="state" id="state">
           {% for province in provinces %}
             <option>{{ province.name }}</option>
           {% endfor %}

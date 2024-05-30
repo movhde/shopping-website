@@ -17,14 +17,6 @@ class AddressRepository extends ServiceEntityRepository
         parent::__construct($registry, Address::class);
     }
 
-    public function removeAddress(int $id, User $user)
-    {
-        $this->getEntityManager()->createQuery('DELETE FROM App\Entity\Address ads WHERE ads.id = :addressId AND ads.user = :user')
-            ->setParameter('addressId', $id)
-            ->setParameter('user', $user)
-            ->execute();
-    }
-
     //    /**
     //     * @return Address[] Returns an array of Address objects
     //     */
