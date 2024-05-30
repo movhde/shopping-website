@@ -4,6 +4,7 @@
 
 {% block body %}
 <div class="container mx-auto mt-10">
+<form action="{{ path('app_submit_order') }}">
   <p class="text-center mb-4 font-bold text-xl">خلاصه خرید شما</p>
   <div class="w-full max-w-4xl mx-auto flex flex-col gap-4">
     {% set totalPrice = 0 %}
@@ -29,22 +30,25 @@
         <span class="text-sm font-bold">قیمت کل</span>
         <span class="text-sm">{{ numberConvertor(order.amount * order.product.price) }}</span>
       </div>
+      <input name="addressId" hidden value="{{ order.userOrder.address.id }}">
     </div>
     {% set totalPrice = totalPrice + (order.amount * order.product.price) %}
     {% set ordersLength = orders|length %}
 
     {% endfor %}
     <div class="flex flex-col gap-2 items-center h-fit p-8 bg-white border border-gray-200 rounded-lg">
-        <span class="text-xl font-bold mb-4">صورتحساب نهایی</span>
-        <div class="lg:gap-20 gap-10 w-full flex justify-between">
-            <span class="text-gray-500 text-sm">تعداد سفارشات</span>
-            <span class="text-gray-500 text-sm">{{ numberConvertor(ordersLength) }}</span>
-        </div>
-        <div class="lg:gap-20 gap-10 w-full flex justify-between">
-            <span class="text-gray-500 text-sm">مجموع کل پرداختی شما</span>
-            <span class="text-gray-500 text-sm">{{ numberConvertor(totalPrice) }} تومان</span>
-        </div>
-          <input type="submit" class="cursor-pointer py-2 px-6 border border-black mt-4 rounded-lg text-lg text-black  outline-none" type="button" value="پرداخت و تکمیل خرید" >
+      <span class="text-xl font-bold mb-4">صورتحساب نهایی</span>
+      <div class="lg:gap-20 gap-10 w-full flex justify-between">
+          <span class="text-gray-500 text-sm">تعداد سفارشات</span>
+          <span class="text-gray-500 text-sm">{{ numberConvertor(ordersLength) }}</span>
+      </div>
+      <div class="lg:gap-20 gap-10 w-full flex justify-between">
+          <span class="text-gray-500 text-sm">مجموع کل پرداختی شما</span>
+          <span class="text-gray-500 text-sm">{{ numberConvertor(totalPrice) }} تومان</span>
+      </div>
+      <input type="submit" class="cursor-pointer py-2 px-6 border border-black mt-4 rounded-lg text-lg text-black  outline-none" type="button" value="پرداخت و تکمیل خرید" >
     </div>
   </div>
+</form>
+</div>
 {% endblock %}

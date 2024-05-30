@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="mt-10 w-full max-w-4xl mx-auto flex flex-col justify-center items-center gap-4 bg-white border border-gray-300 rounded-lg p-4">
+      <span class="text-green-700 text-2xl">سفارش شما با موفقیت ثبت شد.</span>
+      <a href="{{ path('app_homepage') }}" class="border-2 border-white hover:border-1 hover:border-slate-500 transition p-2 rounded-lg">بازگشت به صفحه اصلی</a>
+    </div>
+{% endblock %}

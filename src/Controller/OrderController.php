@@ -84,6 +84,19 @@ class OrderController extends AbstractController
         ]);
     }
 
+    #[Route('/submit/order', name: 'app_submit_order')]
+    public function submitOrder(OrderRepository $orderRepository, Request $request, EntityManagerInterface $entityManager)
+    {
+        $orders = $orderRepository->findBy(['customer' => $this->getUser(), 'address' => $request->get('addressId')]);
+        foreach ($orders as $order) {
+            $order->setStatus(true);
+            $entityManager->persist($order);
+        }
+        $entityManager->flush();
+
+        return $this->render('order/submit.html.twig');
+    }
+
     #[Route('/ajax', name: 'app_ajax')]
     public function ajax(Request $request, ProvinceRepository $provinceRepository, SerializerInterface $serializer, CityRepository $cityRepository)
     {
