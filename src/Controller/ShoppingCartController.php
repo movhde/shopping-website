@@ -76,7 +76,8 @@ class ShoppingCartController extends AbstractController
         $shoppingCart->setAmount($shoppingCart->getAmount() - 1);
 
         if ($shoppingCart->getAmount() === 0) {
-            $shoppingCartRepository->removeProduct($shoppingCart->getProduct()->getId(), $this->getUser());
+            $entityManager->remove($shoppingCart);
+            $entityManager->flush();
         }
 
         $entityManager->flush();
